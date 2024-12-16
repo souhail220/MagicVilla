@@ -1,3 +1,6 @@
+using MagicVilla_VillaAPI.Models;
+using MagicVilla_VillaAPI.Repository;
+using MagicVilla_VillaAPI.Repository.IRepository;
 using Microsoft.EntityFrameworkCore;
 
 namespace MagicVilla_VillaAPI
@@ -13,6 +16,10 @@ namespace MagicVilla_VillaAPI
             {
                 option.UseSqlServer(builder.Configuration.GetConnectionString("DefaulSQLConnection"));
             });
+
+            builder.Services.AddScoped<APIResponse>();
+
+            builder.Services.AddScoped<IVillaRepository, VillaRepository>();
 
             builder.Services.AddAutoMapper(typeof(MappingConfig));
 
