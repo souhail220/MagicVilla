@@ -20,6 +20,7 @@
         /// Gets or sets the Villas_API
         /// </summary>
         public DbSet<Villa> Villas_API { get; set; }
+        public DbSet<VillaNb> VillasNb_API { get; set; }
 
         /// <summary>
         /// The OnModelCreating
@@ -89,6 +90,14 @@
                     Occupancy = 4,
                     Amenity = "",
                 });
+            modelBuilder.Entity<VillaNb>().HasData(
+                new VillaNb()
+                {
+                    VillaNumber = 1,
+                    SpecialDetails = "Great",
+                    CreatedDate = DateTime.Now
+                }
+            );
         }
     }
 }
