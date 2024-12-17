@@ -47,7 +47,7 @@ namespace MagicVilla_VillaAPI.Controllers
         public async Task<ActionResult<APIResponse>> GetVilla(int id){
             if (id == 0)
             {
-                _APIResponse.ErrrorMessage.Add("Id must not be 0");
+                _APIResponse.ErrorMessage.Add("Id must not be 0");
                 _APIResponse.IsSuccess = false;
                 _APIResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
                 return BadRequest(_APIResponse);
@@ -55,7 +55,7 @@ namespace MagicVilla_VillaAPI.Controllers
             var villa = await _dbVilla.GetAsync(villa => villa.Id == id);
             if (villa == null)
             {
-                _APIResponse.ErrrorMessage.Add("Villa not Found");
+                _APIResponse.ErrorMessage.Add("Villa not Found");
                 _APIResponse.IsSuccess = false;
                 _APIResponse.StatusCode = System.Net.HttpStatusCode.NotFound;
                 return NotFound(_APIResponse);
@@ -75,16 +75,16 @@ namespace MagicVilla_VillaAPI.Controllers
         {
             if(await _dbVilla.GetAsync(dbVilla => dbVilla.Name.ToLower() == createVillaDTO.Name.ToLower()) != null)
             {
-                _APIResponse.ErrrorMessage.Add("Duplication Error");
-                _APIResponse.ErrrorMessage.Add("Villa already exists");
+                _APIResponse.ErrorMessage.Add("Duplication Error");
+                _APIResponse.ErrorMessage.Add("Villa already exists");
                 _APIResponse.IsSuccess = false;
                 _APIResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
                 return BadRequest(_APIResponse);
             }
             if (createVillaDTO == null)
             {
-                _APIResponse.ErrrorMessage.Add("Villa is null Error");
-                _APIResponse.ErrrorMessage.Add("Villa must be noy Empty");
+                _APIResponse.ErrorMessage.Add("Villa is null Error");
+                _APIResponse.ErrorMessage.Add("Villa must be noy Empty");
                 _APIResponse.IsSuccess = false;
                 _APIResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
                 return BadRequest(_APIResponse);
@@ -107,8 +107,8 @@ namespace MagicVilla_VillaAPI.Controllers
         {
             if (id == 0)
             {
-                _APIResponse.ErrrorMessage.Add("Id is Zero Error");
-                _APIResponse.ErrrorMessage.Add("Id should not be zero");
+                _APIResponse.ErrorMessage.Add("Id is Zero Error");
+                _APIResponse.ErrorMessage.Add("Id should not be zero");
                 _APIResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
                 return BadRequest(_APIResponse);
             }
@@ -117,8 +117,8 @@ namespace MagicVilla_VillaAPI.Controllers
                 var villa = await _dbVilla.GetAsync(villa => villa.Id == id);
                 if (villa == null)
                 {
-                    _APIResponse.ErrrorMessage.Add("NotFound Error");
-                    _APIResponse.ErrrorMessage.Add("Villa not in List");
+                    _APIResponse.ErrorMessage.Add("NotFound Error");
+                    _APIResponse.ErrorMessage.Add("Villa not in List");
                     _APIResponse.StatusCode = System.Net.HttpStatusCode.NotFound;
                     return NotFound(_APIResponse);
                 }
@@ -126,7 +126,7 @@ namespace MagicVilla_VillaAPI.Controllers
                 await _dbVilla.DeleteAsync(villa);
             }
             catch (Exception ex){
-                _APIResponse.ErrrorMessage.Add(ex.Message);
+                _APIResponse.ErrorMessage.Add(ex.Message);
                 _APIResponse.StatusCode = System.Net.HttpStatusCode.NotFound;
                 return NotFound(_APIResponse);
             }
@@ -142,7 +142,7 @@ namespace MagicVilla_VillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<APIResponse>> UpdateVilla(int id, [FromBody]VillaUpdateDTO updateVillaDTO) {
             if (id == 0 || updateVillaDTO == null){
-                _APIResponse.ErrrorMessage.Add("Body Error");
+                _APIResponse.ErrorMessage.Add("Body Error");
                 _APIResponse.IsSuccess = false;
                 _APIResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
                 return BadRequest(_APIResponse);
@@ -167,7 +167,7 @@ namespace MagicVilla_VillaAPI.Controllers
         {
             if (id == 0 || updateVillaDTO == null)
             {
-                _APIResponse.ErrrorMessage.Add("Body Error");
+                _APIResponse.ErrorMessage.Add("Body Error");
                 _APIResponse.IsSuccess = false;
                 _APIResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
                 return BadRequest(_APIResponse);
@@ -175,7 +175,7 @@ namespace MagicVilla_VillaAPI.Controllers
             var villa = await _dbVilla.GetAsync(v => v.Id == id, tracked: false);
             if (villa == null)
             {
-                _APIResponse.ErrrorMessage.Add("Villa is Not Found");
+                _APIResponse.ErrorMessage.Add("Villa is Not Found");
                 _APIResponse.IsSuccess = false;
                 _APIResponse.StatusCode = System.Net.HttpStatusCode.NotFound;
                 return NotFound(_APIResponse);
@@ -187,7 +187,7 @@ namespace MagicVilla_VillaAPI.Controllers
             updateVillaDTO.ApplyTo(villaDTO, ModelState);
             if(!ModelState.IsValid)
             {
-                _APIResponse.ErrrorMessage.Add("Villa is Not Valid");
+                _APIResponse.ErrorMessage.Add("Villa is Not Valid");
                 _APIResponse.IsSuccess = false;
                 _APIResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
                 return BadRequest(_APIResponse);
