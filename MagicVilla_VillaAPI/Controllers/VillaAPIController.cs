@@ -73,29 +73,38 @@ namespace MagicVilla_VillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<APIResponse>> CreateVilla([FromBody] VillaCreateDTO createVillaDTO)
         {
-            if(await _dbVilla.GetAsync(dbVilla => dbVilla.Name.ToLower() == createVillaDTO.Name.ToLower()) != null)
+            try
             {
-                _APIResponse.ErrorMessage.Add("Duplication Error");
-                _APIResponse.ErrorMessage.Add("Villa already exists");
-                _APIResponse.IsSuccess = false;
-                _APIResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
-                return BadRequest(_APIResponse);
-            }
-            if (createVillaDTO == null)
-            {
-                _APIResponse.ErrorMessage.Add("Villa is null Error");
-                _APIResponse.ErrorMessage.Add("Villa must be noy Empty");
-                _APIResponse.IsSuccess = false;
-                _APIResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
-                return BadRequest(_APIResponse);
-            }
-            Villa villa = _mapper.Map<Villa>(createVillaDTO);
+                if (await _dbVilla.GetAsync(dbVilla => dbVilla.Name.ToLower() == createVillaDTO.Name.ToLower()) != null)
+                {
+                    _APIResponse.ErrorMessage.Add("Duplication Error");
+                    _APIResponse.ErrorMessage.Add("Villa already exists");
+                    _APIResponse.IsSuccess = false;
+                    _APIResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                    return BadRequest(_APIResponse);
+                }
+                if (createVillaDTO == null)
+                {
+                    _APIResponse.ErrorMessage.Add("Villa is null Error");
+                    _APIResponse.ErrorMessage.Add("Villa must be noy Empty");
+                    _APIResponse.IsSuccess = false;
+                    _APIResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                    return BadRequest(_APIResponse);
+                }
+                Villa villa = _mapper.Map<Villa>(createVillaDTO);
 
-            await _dbVilla.CreateAsync(villa);
-            _APIResponse.Result = _mapper.Map<VillaDTO>(villa);
-            _APIResponse.IsSuccess = true;
-            _APIResponse.StatusCode = System.Net.HttpStatusCode.Created;
-            return CreatedAtRoute("GetVilla", new { id = villa.Id }, _APIResponse);
+                await _dbVilla.CreateAsync(villa);
+                _APIResponse.Result = _mapper.Map<VillaDTO>(villa);
+                _APIResponse.IsSuccess = true;
+                _APIResponse.StatusCode = System.Net.HttpStatusCode.Created;
+                return CreatedAtRoute("GetVilla", new { id = villa.Id }, _APIResponse);
+            }catch(Exception ex)
+            {
+                _APIResponse.ErrorMessage.Add(ex.Message.ToString());
+                _APIResponse.IsSuccess = false;
+                _APIResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                return _APIResponse;
+            }
         }
 
 
