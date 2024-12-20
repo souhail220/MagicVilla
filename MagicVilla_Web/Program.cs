@@ -14,10 +14,34 @@ namespace MagicVilla_Web
             builder.Services.AddAutoMapper(typeof(MappingConfig));
 
             builder.Services.AddHttpClient<IVillaService, VillaService>();
-
             builder.Services.AddScoped<IVillaService, VillaService>();
 
+            // Register VillaNbService
+            builder.Services.AddHttpClient<IVillaNbService, VillaNbService>();
+            builder.Services.AddScoped<IVillaNbService, VillaNbService>();
+
             var app = builder.Build();
+
+            // Log all activated services
+            /*using (var scope = app.Services.CreateScope())
+            {
+                var serviceProvider = scope.ServiceProvider;
+                foreach (var service in builder.Services)
+                {
+                    try
+                    {
+                        var serviceInstance = serviceProvider.GetService(service.ServiceType);
+                        if (serviceInstance != null)
+                        {
+                            Console.WriteLine($"Activated Service: {service.ServiceType.FullName}, Lifetime: {service.Lifetime}, Implementation: {service.ImplementationType?.FullName}");
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Failed to activate service: {service.ServiceType.FullName}. Exception: {ex.Message}");
+                    }
+                }
+            }*/
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())

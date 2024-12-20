@@ -32,7 +32,7 @@ namespace MagicVilla_Web.Controllers
             return View(list);
         }
 
-        public async Task<IActionResult> CreateVilla()
+        public IActionResult CreateVilla()
         {
             return View();
         }
@@ -54,30 +54,42 @@ namespace MagicVilla_Web.Controllers
         }
 
 
-        public async Task<IActionResult> Delete()
+        public async Task<IActionResult> UpdateVillaForm(int VillaId)
         {
-            List<VillaDTO> list = new();
-
-            var response = await villaService.GetAllAsync<APIResponse>();
+            var response = await villaService.GetAsync<APIResponse>(VillaId);
             if (response != null && response.IsSuccess)
             {
-                list = JsonConvert.DeserializeObject<List<VillaDTO>>(Convert.ToString(response.Result));
-
+                Villa villa = JsonConvert.DeserializeObject<Villa>(Convert.ToString(response.Result));
+                return View(mapper.Map<VillaUpdateDTO>(villa));
             }
-            return View(list);
+            return NotFound();
         }
 
-        public async Task<IActionResult> UpdateVilla()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateVilla(VillaUpdateDTO model)
         {
-            List<VillaDTO> list = new();
+            if (ModelState.IsValid)
+            {
+                var response = await villaService.UpdateAsync<APIResponse>(model);
+                if (response != null && response.IsSuccess)
+                {
+                    return RedirectToAction(nameof(IndexVilla));
+                }
+            }
+            return View(model);
+        }
 
-            var response = await villaService.GetAllAsync<APIResponse>();
+        public async Task<IActionResult> DeleteVilla(int VillaId)
+        {
+            var response = await villaService.DeleteAsync<APIResponse>(VillaId);
             if (response != null && response.IsSuccess)
             {
-                list = JsonConvert.DeserializeObject<List<VillaDTO>>(Convert.ToString(response.Result));
-
+                return RedirectToAction(nameof(IndexVilla));
             }
-            return View(list);
+            return BadRequest();
         }
+
+        
     }
 }
