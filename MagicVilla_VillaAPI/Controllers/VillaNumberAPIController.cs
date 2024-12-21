@@ -18,7 +18,12 @@ namespace MagicVilla_VillaAPI.Controllers
         private readonly IVillaNbRepository _dbVillaNb;
         private readonly IVillaRepository _dbVilla;
         private readonly IMapper _mapper;
-        public VillaNumberAPIController(APIResponse APIResponse, IVillaNbRepository dbVillaNb, IVillaRepository dbVilla, IMapper mapper) {
+        public VillaNumberAPIController(
+            APIResponse APIResponse,
+            IVillaNbRepository dbVillaNb,
+            IVillaRepository dbVilla,
+            IMapper mapper
+            ) {
             _APIResponse = APIResponse;
             _dbVillaNb = dbVillaNb;
             _dbVilla = dbVilla;
@@ -31,7 +36,7 @@ namespace MagicVilla_VillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<APIResponse>> GetVillasNb()
         {
-            IEnumerable<VillaNb> villasNbList = await _dbVillaNb.GetAllAsync();
+            IEnumerable<VillaNb> villasNbList = await _dbVillaNb.GetAllAsync(includeProperties: "Villa");
             _APIResponse.Result = _mapper.Map<List<VillaNbDTO>>(villasNbList);
             _APIResponse.IsSuccess = true;
             _APIResponse.StatusCode = System.Net.HttpStatusCode.OK;

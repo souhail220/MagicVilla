@@ -15,14 +15,16 @@
 	<table class="table">
 		<thead>
 			<tr>
-				<th>VillaNumber</th>
-				<th>SpecialDetails</th>
+				<th>Villa Name</th>
+				<th>Villa Number</th>
+				<th>Special Details</th>
 				<th>Actions</th>
 		</thead>
 		<tbody>
 			@foreach (var villaNb in Model)
 			{
 				<tr>
+					<td>@villaNb.Villa.Name</td>
 					<td>@villaNb.VillaNumber</td>
 					<td>@villaNb.SpecialDetails</td>
 					<td>
