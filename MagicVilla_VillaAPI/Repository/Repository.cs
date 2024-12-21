@@ -59,6 +59,9 @@ namespace MagicVilla_VillaAPI.Repository
         {
             await _db.SaveChangesAsync();
         }
-
+        public async Task FindAsync(int id)
+        {
+            await _dbSet.FindAsync(id);
+        }
     }
 }

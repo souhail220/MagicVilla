@@ -20,7 +20,7 @@
         /// Gets or sets the Villas_API
         /// </summary>
         public DbSet<Villa> Villas_API { get; set; }
-        public DbSet<VillaNb> VillasNb_API { get; set; }
+        public DbSet<VillaNb> VillaNb_API { get; set; }
 
         /// <summary>
         /// The OnModelCreating
@@ -94,8 +94,9 @@
                 new VillaNb()
                 {
                     VillaNumber = 1,
-                    SpecialDetails = "Great",
-                    CreatedDate = DateTime.Now
+                    SpecialDetails = "Moknine",
+                    CreatedDate = DateTime.Now,
+                    VillaID = 1,
                 }
             );
         }

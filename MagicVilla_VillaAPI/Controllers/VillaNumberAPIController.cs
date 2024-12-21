@@ -16,10 +16,12 @@ namespace MagicVilla_VillaAPI.Controllers
     {
         protected APIResponse _APIResponse;
         private readonly IVillaNbRepository _dbVillaNb;
+        private readonly IVillaRepository _dbVilla;
         private readonly IMapper _mapper;
-        public VillaNumberAPIController(APIResponse APIResponse, IVillaNbRepository dbVillaNb, IMapper mapper) {
+        public VillaNumberAPIController(APIResponse APIResponse, IVillaNbRepository dbVillaNb, IVillaRepository dbVilla, IMapper mapper) {
             _APIResponse = APIResponse;
             _dbVillaNb = dbVillaNb;
+            _dbVilla = dbVilla;
             _mapper = mapper;
         }
 
@@ -79,15 +81,26 @@ namespace MagicVilla_VillaAPI.Controllers
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<APIResponse>> CreateVillaNumber([FromBody] VillaNbDTO createDTO)
+        public async Task<ActionResult<APIResponse>> CreateVillaNumber([FromBody] VillaNbCreateDTO createDTO)
         {
             try
             {
 
                 if (await _dbVillaNb.GetAsync(u => u.VillaNumber == createDTO.VillaNumber) != null)
                 {
-                    ModelState.AddModelError("ErrorMessages", "Villa Number already Exists!");
-                    return BadRequest(ModelState);
+                    _APIResponse.ErrorMessage.Add("Villa Number already Exists!");
+                    _APIResponse.ErrorMessage.Add("Villa Not Found");
+                    _APIResponse.IsSuccess = false;
+                    _APIResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                    return BadRequest(_APIResponse);
+                }
+                if(await _dbVilla.GetAsync(u => u.Id == createDTO.VillaID) == null)
+                {
+                    _APIResponse.ErrorMessage.Add("Villa is not Found");
+                    _APIResponse.ErrorMessage.Add("Wrong Villa Id");
+                    _APIResponse.IsSuccess = false;
+                    _APIResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                    return BadRequest(_APIResponse);
                 }
                 if (createDTO == null)
                 {
@@ -144,7 +157,7 @@ namespace MagicVilla_VillaAPI.Controllers
         [HttpPut("{VillaNumber:int}", Name = "UpdateVillaNumber")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<APIResponse>> UpdateVillaNumber(int VillaNumber, [FromBody] VillaNbDTO updateDTO)
+        public async Task<ActionResult<APIResponse>> UpdateVillaNumber(int VillaNumber, [FromBody] VillaNbUpdateDTO updateDTO)
         {
             try
             {
