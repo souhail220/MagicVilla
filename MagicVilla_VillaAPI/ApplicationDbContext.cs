@@ -21,6 +21,7 @@
         /// </summary>
         public DbSet<Villa> Villas_API { get; set; }
         public DbSet<VillaNb> VillaNb_API { get; set; }
+        public DbSet<LocalUser> LocalUsers { get; set; }
 
         /// <summary>
         /// The OnModelCreating

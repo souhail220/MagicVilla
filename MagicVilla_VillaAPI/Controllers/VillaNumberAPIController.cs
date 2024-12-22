@@ -90,7 +90,14 @@ namespace MagicVilla_VillaAPI.Controllers
         {
             try
             {
-
+                if(createDTO.VillaNumber == 0)
+                {
+                    _APIResponse.ErrorMessage.Add("Villa Number must not be 0");
+                    _APIResponse.ErrorMessage.Add("Villa Number is 0");
+                    _APIResponse.IsSuccess = false;
+                    _APIResponse.StatusCode = System.Net.HttpStatusCode.BadRequest;
+                    return BadRequest(_APIResponse);
+                }
                 if (await _dbVillaNb.GetAsync(u => u.VillaNumber == createDTO.VillaNumber) != null)
                 {
                     _APIResponse.ErrorMessage.Add("Villa Number already Exists!");
@@ -137,10 +144,6 @@ namespace MagicVilla_VillaAPI.Controllers
         {
             try
             {
-                if (VillaNumber == 0)
-                {
-                    return BadRequest();
-                }
                 var villaNumber = await _dbVillaNb.GetAsync(u => u.VillaNumber == VillaNumber);
                 if (villaNumber == null)
                 {

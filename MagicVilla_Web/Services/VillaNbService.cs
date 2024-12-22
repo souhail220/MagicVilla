@@ -32,7 +32,7 @@ namespace MagicVilla_Web.Services
             });
         }
 
-        public Task<T> CreateAsync<T>(VillaNbDTO dto)
+        public Task<T> CreateAsync<T>(VillaNbRequestDTO dto)
         {
             return SendAsync<T>(new APIRequest()
             {
@@ -51,7 +51,7 @@ namespace MagicVilla_Web.Services
             });
         }
 
-        public Task<T> UpdateAsync<T>(VillaNbDTO dto)
+        public Task<T> UpdateAsync<T>(VillaNbRequestDTO dto)
         {
             return SendAsync<T>(new APIRequest()
             {

@@ -23,6 +23,8 @@ namespace MagicVilla_VillaAPI
 
             builder.Services.AddScoped<IVillaNbRepository, VillaNbRepository>();
 
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+
             builder.Services.AddAutoMapper(typeof(MappingConfig));
 
             builder.Services.AddControllers(option =>
