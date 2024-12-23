@@ -33,6 +33,7 @@ namespace MagicVilla_VillaAPI.Controllers
                 return BadRequest(_APIResponse);
             }
 
+            _APIResponse.Result = loginResponse;
             _APIResponse.IsSuccess = true;
             _APIResponse.StatusCode = System.Net.HttpStatusCode.OK;
             return Ok(_APIResponse);
@@ -61,6 +62,7 @@ namespace MagicVilla_VillaAPI.Controllers
                 return BadRequest(_APIResponse);
             }
 
+            _APIResponse.Result = user;
             _APIResponse.IsSuccess = true;
             _APIResponse.StatusCode = System.Net.HttpStatusCode.OK;
             return Ok(_APIResponse);
