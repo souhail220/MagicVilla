@@ -20,10 +20,13 @@ namespace MagicVilla_Web
             builder.Services.AddHttpClient<IVillaNbService, VillaNbService>();
             builder.Services.AddScoped<IVillaNbService, VillaNbService>();
 
+            builder.Services.AddHttpClient<IAuthService, AuthService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
+
             var app = builder.Build();
 
             // Log all activated services
-            /*using (var scope = app.Services.CreateScope())
+            using (var scope = app.Services.CreateScope())
             {
                 var serviceProvider = scope.ServiceProvider;
                 foreach (var service in builder.Services)
@@ -41,7 +44,7 @@ namespace MagicVilla_Web
                         Console.WriteLine($"Failed to activate service: {service.ServiceType.FullName}. Exception: {ex.Message}");
                     }
                 }
-            }*/
+            }
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
