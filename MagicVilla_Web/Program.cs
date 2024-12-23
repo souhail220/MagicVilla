@@ -23,8 +23,18 @@ namespace MagicVilla_Web
             builder.Services.AddHttpClient<IAuthService, AuthService>();
             builder.Services.AddScoped<IAuthService, AuthService>();
 
+            builder.Services.AddSession(option =>
+            {
+                option.IdleTimeout = TimeSpan.FromMinutes(10);
+                option.Cookie.HttpOnly = true;
+                option.Cookie.IsEssential = true;
+            });
+
+            builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             var app = builder.Build();
 
+            /*
             // Log all activated services
             using (var scope = app.Services.CreateScope())
             {
@@ -44,7 +54,7 @@ namespace MagicVilla_Web
                         Console.WriteLine($"Failed to activate service: {service.ServiceType.FullName}. Exception: {ex.Message}");
                     }
                 }
-            }
+            }*/
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -60,6 +70,8 @@ namespace MagicVilla_Web
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.MapControllerRoute(
                 name: "default",
