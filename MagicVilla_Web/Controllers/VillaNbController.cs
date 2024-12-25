@@ -4,6 +4,7 @@ using MagicVilla_Web.Models.DTO;
 using MagicVilla_Web.Models.VM;
 using MagicVilla_Web.Services;
 using MagicVilla_Web.Services.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
@@ -32,6 +33,7 @@ namespace MagicVilla_Web.Controllers
             return View(villaNbs);
         }
 
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> CreateVillaNbForm()
         {
             VillaNbCreateVM villaNbCreateVM = new();
@@ -49,6 +51,7 @@ namespace MagicVilla_Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateVillaNbForm(VillaNbCreateVM model)
         {
@@ -78,6 +81,7 @@ namespace MagicVilla_Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateVillaNbForm(int VillaNumber)
         {
             APIResponse response = await villaNbService.GetAsync<APIResponse>(VillaNumber);
@@ -102,6 +106,7 @@ namespace MagicVilla_Web.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateVillaNbForm(VillaNbCreateVM model)
         {
@@ -132,6 +137,7 @@ namespace MagicVilla_Web.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteVillaNb(int VillaNumber)
         {
             APIResponse response = await villaNbService.DeleteAsync<APIResponse>(VillaNumber);
