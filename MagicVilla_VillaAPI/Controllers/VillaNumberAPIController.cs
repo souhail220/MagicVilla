@@ -43,6 +43,8 @@ namespace MagicVilla_VillaAPI.Controllers
             return Ok(_APIResponse);
         }
 
+
+
         [HttpGet("{VillaNumber:int}", Name = "GetVillaNB")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -82,7 +84,10 @@ namespace MagicVilla_VillaAPI.Controllers
             }
         }
 
+
+
         [HttpPost(Name = "CreateVillaNumber")]
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -136,7 +141,10 @@ namespace MagicVilla_VillaAPI.Controllers
             return _APIResponse;
         }
 
+
+
         [HttpDelete("{VillaNumber:int}", Name = "DeleteVillaNumber")]
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -162,7 +170,10 @@ namespace MagicVilla_VillaAPI.Controllers
             return _APIResponse;
         }
 
+
+
         [HttpPut("{VillaNumber:int}", Name = "UpdateVillaNumber")]
+        [Authorize(Roles = "admin")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<APIResponse>> UpdateVillaNumber(int VillaNumber, [FromBody] VillaNbUpdateDTO updateDTO)
