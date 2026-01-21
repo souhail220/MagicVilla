@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Asp.Versioning;
+using AutoMapper;
 using MagicVilla_VillaAPI.Models;
 using MagicVilla_VillaAPI.Models.DTO;
 using MagicVilla_VillaAPI.Repository.IRepository;
@@ -9,8 +10,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace MagicVilla_VillaAPI.Controllers
 {
     //[Route("api/[controller]")]
-    [Route("api/VillaAPI")]
+    [Route("api/v{version:apiVersion}/VillaAPI")]
     [ApiController]
+    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     public class VillaAPIController : ControllerBase
     {
         protected APIResponse _APIResponse;
@@ -41,7 +44,7 @@ namespace MagicVilla_VillaAPI.Controllers
         }
 
 
-
+        [MapToApiVersion("1.0")]
         [HttpGet("{id:int}", Name = "GetVilla")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -69,8 +72,6 @@ namespace MagicVilla_VillaAPI.Controllers
             _APIResponse.StatusCode = System.Net.HttpStatusCode.OK;
             return Ok(_APIResponse);
         }
-
-
 
 
         [HttpPost]

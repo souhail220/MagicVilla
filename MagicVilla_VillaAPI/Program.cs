@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using MagicVilla_VillaAPI.Models;
 using MagicVilla_VillaAPI.Repository;
 using MagicVilla_VillaAPI.Repository.IRepository;
@@ -30,6 +31,18 @@ namespace MagicVilla_VillaAPI
             builder.Services.AddScoped<IUserRepository, UserRepository>();
 
             builder.Services.AddAutoMapper(typeof(MappingConfig));
+
+            // API Versioning
+            builder.Services.AddApiVersioning(options =>
+            {
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1.0);
+                options.ReportApiVersions = true;
+            }).AddApiExplorer(options =>
+            {
+                options.GroupNameFormat = "'v'VVV";
+                options.SubstituteApiVersionInUrl = true;
+            });
 
             var key = builder.Configuration.GetValue<string>("ApiSettings:Secret");
 
@@ -71,23 +84,23 @@ namespace MagicVilla_VillaAPI
 
                 options.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
-                    {
-                        new OpenApiSecurityScheme
                         {
-                            Reference = new OpenApiReference
+                            new OpenApiSecurityScheme
                             {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                },
+                                Scheme = "oauth2",
+                                Name = "Bearer",
+                                In = ParameterLocation.Header
                             },
-                            Scheme = "oauth2",
-                            Name = "Bearer",
-                            In = ParameterLocation.Header
-                        },
-                        new List<string>()
-                    }
+                            new List<string>()
+                        }
                 });
             });
-            
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
